@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../th-animated/th-animated.html">
-<link rel="import" href="../th-d3-chart/lib/d3-import.html">
 
 <!--
 'Compare Image' component provides the ability to compare two overlapping images,
@@ -105,6 +104,7 @@ often used to show 'before' and 'after'
         
       </div>
   </template>
+  <script src="../d3/d3.min.js"></script> 
   <script>
 
       Polymer('th-compare-image', {
@@ -176,6 +176,17 @@ often used to show 'before' and 'after'
           function dragEnd(d){
             self.lastPos = slider.style('left');
           }
+        },
+        reset: function(){
+          var self = this,
+              slider = d3.select(self.$.slider),
+              beforeLayer =  d3.select(self.$.photobefore).node();
+
+          self.lastPos = self.width * parseInt(self.sliderPos)/100;
+
+          slider.style('left', self.sliderPos);
+          beforeLayer.style.clip = 'rect(0px ' + self.lastPos + 'px 99999px 0px)';
+
         }
         
       });
