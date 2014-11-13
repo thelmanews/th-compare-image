@@ -47,7 +47,7 @@ often used to show 'before' and 'after'
             margin: -10px;
             color: white;
             opacity: 0;
-            top: {{height/2 + "px"}}; 
+            top: {{computedHeight/2 + "px"}}; 
         }
 
         .pulse {
@@ -59,11 +59,7 @@ often used to show 'before' and 'after'
 
         #arrowLeft {
           text-align: right;
-          left: {{width / 2 - 17 + "px"}};
-        }
-
-        #arrowRight {
-          
+          left: {{computedWidth / 2 - 17 + "px"}};
         }
 
         #arrowRight:after {
@@ -93,10 +89,10 @@ often used to show 'before' and 'after'
 
       <!-- Inline styles for mobile and Safari -->
       <div id="container">
-        <div id='photos' style="width: {{width}}px; height:{{height}}px;">
+        <div id='photos' style="width: {{computedWidth}}px; height:{{computedHeight}}px;">
           <div id="slider" style="left: {{sliderPos}}"></div>
-          <div id="arrowLeft" class="arrows pulse" style="top: {{height/2}}px; left: {{lastPos - 16}}px;"></div>
-          <div id="arrowRight" class="arrows pulse"  style="top: {{height/2}}px; left: {{lastPos + 20}}px;"></div>
+          <div id="arrowLeft" class="arrows pulse" style="top: {{computedHeight/2}}px; left: {{lastPos - 16}}px;"></div>
+          <div id="arrowRight" class="arrows pulse"  style="top: {{computedHeight/2}}px; left: {{lastPos + 20}}px;"></div>
           <div class='layer' id='photoafter' style="background:url('{{imageRight}}') center center no-repeat; background-size: cover;"></div>
           <div class='layer' id='photobefore' style="background:url('{{imageLeft}}') center center no-repeat; background-size: cover;"></div>
         </div>
@@ -124,15 +120,20 @@ often used to show 'before' and 'after'
          */
         sliderPos: "50%",
         /**
-         * 'width' of the container in pixels
-         * @type {Number}
+         * 'width' of the container in pixels or percentage
+         * @type {String}
          */
-        width: 280,
+        width: '280',
         /**
-         * 'height' of the container in pixels
-         * @type {Number}
+         * 'height' of the container in pixels or percentage
+         * @type {String}
          */
-        height: 200,
+        height: '200',
+        ready: function(){
+          var self = this;
+          self.computedWidth=self.computeWidth(self.width);
+          self.computedHeight=self.computeHeight(self.height);
+        },
         init: function() {
           var self = this,
               beforeLayer =  d3.select(self.$.photobefore).node(),
@@ -140,7 +141,7 @@ often used to show 'before' and 'after'
               xPos;
 
           // Initial position of the slider and photo clip
-          self.lastPos = self.width * parseInt(self.sliderPos)/100;
+          self.lastPos = self.computedWidth * parseInt(self.sliderPos)/100;
           beforeLayer.style.clip = 'rect(0px ' + self.lastPos + 'px 99999px 0px)';
           slider.style("left", self.sliderPos);
 
@@ -159,7 +160,7 @@ often used to show 'before' and 'after'
           // Move the slider and photo clip on drag
           function dragMove(d){
             d3.event.sourceEvent.stopPropagation();
-            xPos = Math.max(0,Math.min(self.width,(parseInt(self.lastPos) + d3.event.x)));
+            xPos = Math.max(0,Math.min(self.computedWidth,(parseInt(self.lastPos) + d3.event.x)));
 
             // Remove pulse transition for hinting at slider
             self.$.arrowLeft.classList.remove("pulse");
@@ -168,7 +169,7 @@ often used to show 'before' and 'after'
             d3.timer.flush();
             d3.timer(function() {
                 slider.style('left', xPos + "px");
-                beforeLayer.style.clip = 'rect(0px ' + xPos + 'px '+self.height+'px 0px)';
+                beforeLayer.style.clip = 'rect(0px ' + xPos + 'px '+self.computedHeight+'px 0px)';
                 return true;
             }, 0);
           }
@@ -183,7 +184,7 @@ often used to show 'before' and 'after'
               slider = d3.select(self.$.slider),
               beforeLayer =  d3.select(self.$.photobefore).node();
 
-          self.lastPos = self.width * parseInt(self.sliderPos)/100;
+          self.lastPos = self.computedWidth * parseInt(self.sliderPos)/100;
 
           slider.style('left', self.sliderPos);
           beforeLayer.style.clip = 'rect(0px ' + self.lastPos + 'px 99999px 0px)';
