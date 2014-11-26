@@ -13,12 +13,14 @@ often used to show 'before' and 'after'
 @homepage http://github.com/thelmanews/thelma-text/blob/master/th-compare-image.html
 -->
 
-<polymer-element name="th-compare-image" extends="th-animated" attributes="width height imageLeft imageRight sliderPos">
+<polymer-element name="th-compare-image" extends="th-animated" attributes="imageLeft imageRight sliderPos">
   <template>
       <style>
         :host {
           display: inline-block;
           position: relative;
+          width: 300px;
+          height: 250px;
         }
 
         #photos {
@@ -119,20 +121,10 @@ often used to show 'before' and 'after'
          * @type {String}
          */
         sliderPos: "50%",
-        /**
-         * 'width' of the container in pixels or percentage
-         * @type {String}
-         */
-        width: '280',
-        /**
-         * 'height' of the container in pixels or percentage
-         * @type {String}
-         */
-        height: '200',
         ready: function(){
           var self = this;
-          self.computedWidth=self.computeWidth(self.width);
-          self.computedHeight=self.computeHeight(self.height);
+          self.computedWidth=self.computeWidth();
+          self.computedHeight=self.computeHeight();
         },
         init: function() {
           var self = this,
