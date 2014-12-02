@@ -121,16 +121,14 @@ often used to show 'before' and 'after'
          * @type {String}
          */
         sliderPos: "50%",
-        ready: function(){
-          var self = this;
-          self.computedWidth=self.computeWidth();
-          self.computedHeight=self.computeHeight();
-        },
         init: function() {
           var self = this,
               beforeLayer =  d3.select(self.$.photobefore).node(),
               slider = d3.select(self.$.slider),
               xPos;
+
+          self.computedWidth=self.computeWidth();
+          self.computedHeight=self.computeHeight();
 
           // Initial position of the slider and photo clip
           self.lastPos = self.computedWidth * parseInt(self.sliderPos)/100;
