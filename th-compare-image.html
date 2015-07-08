@@ -151,7 +151,7 @@ often used to show 'before' and 'after'
           // Move the slider and photo clip on drag
           function dragMove(d){
             d3.event.sourceEvent.stopPropagation();
-            xPos = Math.max(0,Math.min(self.computedWidth,(parseInt(self.lastPos) + d3.event.x)));
+            xPos = Math.max(0,Math.min(self.computedWidth,(parseInt(self.lastPos) + d3.event.x || d3.event.sourceEvent.layerX)));
 
             // Remove pulse transition for hinting at slider
             self.$.arrowLeft.classList.remove("pulse");
